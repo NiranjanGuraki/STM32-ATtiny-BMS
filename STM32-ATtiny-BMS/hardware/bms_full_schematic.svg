@@ -1,0 +1,305 @@
+<svg width="1500" height="1150" viewBox="0 0 1500 1150" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+<rect width="1500" height="1150" fill="#ffffff"/>
+<text x="750" y="28" text-anchor="middle" font-size="20" font-weight="bold" fill="#111">BMS Schematic — STM32 Master + 2x ATtiny Modules (6-cell series pack)</text>
+
+<!-- ============ STM32 BLOCK ============ -->
+<rect x="600" y="55" width="300" height="200" rx="8" fill="#eef2ff" stroke="#3b4cca" stroke-width="2"/>
+<text x="750" y="78" text-anchor="middle" font-size="14" font-weight="bold" fill="#20265c">STM32 (I2C Master)</text>
+<text x="615" y="102" font-size="11" fill="#20265c">PB6 (SCL)</text>
+<text x="615" y="122" font-size="11" fill="#20265c">PB7 (SDA)</text>
+<text x="615" y="142" font-size="11" fill="#20265c">PA0 (ADC1_IN0) — current sense in</text>
+<text x="615" y="162" font-size="11" fill="#20265c">PA2 (TX) / PA3 (RX) — UART to host</text>
+<text x="615" y="182" font-size="11" fill="#20265c">TIM2 — internal 100ms SOC tick</text>
+<text x="615" y="205" font-size="11" fill="#20265c">3V3 / GND — logic supply</text>
+<text x="615" y="228" font-size="10" fill="#555">I2C1_ClockSpeed = 100kHz, 7-bit addressing</text>
+
+<!-- STM32 pin stubs down to bus -->
+<line x1="700" y1="255" x2="700" y2="330" stroke="#c0392b" stroke-width="2"/>
+<line x1="730" y1="255" x2="730" y2="360" stroke="#2471a3" stroke-width="2"/>
+<line x1="760" y1="255" x2="760" y2="390" stroke="#555" stroke-width="1.5"/>
+
+<!-- ADC input stub to current sense block -->
+<line x1="900" y1="140" x2="1010" y2="140" stroke="#c88a12" stroke-width="2"/>
+
+<!-- ============ CURRENT SENSE BLOCK ============ -->
+<rect x="1010" y="90" width="240" height="100" rx="8" fill="#fff7e6" stroke="#c88a12" stroke-width="2"/>
+<text x="1130" y="112" text-anchor="middle" font-size="13" font-weight="bold" fill="#7a5300">Pack current sense</text>
+<text x="1022" y="132" font-size="11" fill="#7a5300">Shunt Rs = 0.01Ω in series with</text>
+<text x="1022" y="148" font-size="11" fill="#7a5300">pack B- return path</text>
+<text x="1022" y="166" font-size="11" fill="#7a5300">INA180 gain amp → OUT to PA0</text>
+<text x="1022" y="182" font-size="11" fill="#7a5300">I = V_INA180 / (Rs × Gain)</text>
+
+<!-- ============ I2C BUS ============ -->
+<line x1="70" y1="330" x2="1430" y2="330" stroke="#c0392b" stroke-width="2.5"/>
+<text x="80" y="322" font-size="12" fill="#c0392b" font-weight="bold">SDA bus (shared)</text>
+<rect x="240" y="300" width="10" height="24" fill="#fff" stroke="#c0392b"/>
+<line x1="245" y1="300" x2="245" y2="260" stroke="#c0392b" stroke-width="1.5"/>
+<text x="200" y="255" font-size="10" fill="#c0392b">4.7k → 3V3</text>
+
+<line x1="70" y1="360" x2="1430" y2="360" stroke="#2471a3" stroke-width="2.5"/>
+<text x="80" y="352" font-size="12" fill="#2471a3" font-weight="bold">SCL bus (shared)</text>
+<rect x="280" y="330" width="10" height="24" fill="#fff" stroke="#2471a3"/>
+<line x1="285" y1="330" x2="285" y2="260" stroke="#2471a3" stroke-width="1.5"/>
+<text x="240" y="255" font-size="10" fill="#2471a3">4.7k → 3V3</text>
+
+<line x1="70" y1="390" x2="1430" y2="390" stroke="#555" stroke-width="1.5"/>
+<text x="80" y="405" font-size="11" fill="#555">GND (common return — all boards + shunt low side)</text>
+
+<!-- ============================================================ -->
+<!-- MODULE 1 -->
+<!-- ============================================================ -->
+<rect x="40" y="430" width="700" height="690" rx="8" fill="#eafaf1" stroke="#1e8449" stroke-width="2"/>
+<text x="390" y="455" text-anchor="middle" font-size="15" font-weight="bold" fill="#145a32">Module 1 — ATtiny, I2C addr 0x10, module_id 1 (Cells 1-3, pack bottom)</text>
+
+<!-- ATtiny IC box for module 1 -->
+<rect x="440" y="475" width="260" height="200" rx="6" fill="#ffffff" stroke="#1e8449" stroke-width="1.5"/>
+<text x="570" y="495" text-anchor="middle" font-size="12" font-weight="bold" fill="#145a32">ATtiny (Module 1)</text>
+<text x="452" y="516" font-size="11" fill="#145a32">A4 (SDA) → bus</text>
+<text x="452" y="534" font-size="11" fill="#145a32">A5 (SCL) → bus</text>
+<text x="452" y="556" font-size="11" fill="#145a32">A0 ← N1 divider tap (scale 0.767)</text>
+<text x="452" y="574" font-size="11" fill="#145a32">A1 ← N2 divider tap (scale 0.600)</text>
+<text x="452" y="592" font-size="11" fill="#145a32">A2 ← N3 divider tap (scale 0.357)</text>
+<text x="452" y="610" font-size="11" fill="#145a32">A3 ← Temp divider tap</text>
+<text x="452" y="632" font-size="11" fill="#145a32">D5/D6/D7 → gate resistors → Q1/Q2/Q3</text>
+<text x="452" y="654" font-size="11" fill="#145a32">GND / VCC (local LDO from stack)</text>
+
+<!-- link ATtiny to bus -->
+<line x1="470" y1="475" x2="470" y2="330" stroke="#c0392b" stroke-width="1.5"/>
+<line x1="490" y1="475" x2="490" y2="360" stroke="#2471a3" stroke-width="1.5"/>
+<line x1="510" y1="475" x2="510" y2="390" stroke="#555" stroke-width="1.2"/>
+
+<!-- Cell stack module 1: bottom (GND) to top N3 -->
+<!-- GND node -->
+<line x1="140" y1="1080" x2="220" y2="1080" stroke="#333" stroke-width="1.5"/>
+<text x="90" y="1084" font-size="10" fill="#333">Pack B- / GND</text>
+
+<!-- Cell1 -->
+<rect x="150" y="1000" width="60" height="70" fill="#fef9e7" stroke="#7d6608" stroke-width="1.5"/>
+<text x="180" y="1040" text-anchor="middle" font-size="11" font-weight="bold" fill="#7d6608">Cell 1</text>
+<text x="180" y="1055" text-anchor="middle" font-size="9" fill="#7d6608">~4.2V max</text>
+<line x1="180" y1="1080" x2="180" y2="1070" stroke="#333" stroke-width="1.5"/>
+<line x1="180" y1="1000" x2="180" y2="990" stroke="#333" stroke-width="1.5"/>
+<circle cx="180" cy="990" r="3" fill="#333"/>
+<text x="188" y="985" font-size="10" fill="#333">N1</text>
+
+<!-- Cell2 -->
+<rect x="150" y="910" width="60" height="70" fill="#fef9e7" stroke="#7d6608" stroke-width="1.5"/>
+<text x="180" y="950" text-anchor="middle" font-size="11" font-weight="bold" fill="#7d6608">Cell 2</text>
+<line x1="180" y1="990" x2="180" y2="980" stroke="#333" stroke-width="1.5"/>
+<line x1="180" y1="910" x2="180" y2="900" stroke="#333" stroke-width="1.5"/>
+<circle cx="180" cy="900" r="3" fill="#333"/>
+<text x="188" y="895" font-size="10" fill="#333">N2</text>
+
+<!-- Cell3 -->
+<rect x="150" y="820" width="60" height="70" fill="#fef9e7" stroke="#7d6608" stroke-width="1.5"/>
+<text x="180" y="860" text-anchor="middle" font-size="11" font-weight="bold" fill="#7d6608">Cell 3</text>
+<line x1="180" y1="900" x2="180" y2="890" stroke="#333" stroke-width="1.5"/>
+<line x1="180" y1="820" x2="180" y2="810" stroke="#333" stroke-width="1.5"/>
+<circle cx="180" cy="810" r="3" fill="#333"/>
+<text x="188" y="805" font-size="10" fill="#333">N3 (pack top, module 1)</text>
+
+<!-- Divider resistors N1 -> A0 -->
+<rect x="270" y="965" width="14" height="34" fill="#fff" stroke="#333"/>
+<text x="290" y="985" font-size="9" fill="#333">Rtop1</text>
+<line x1="180" y1="990" x2="277" y2="990" stroke="#333" stroke-width="1"/>
+<line x1="277" y1="965" x2="277" y2="990" stroke="#333" stroke-width="1"/>
+<rect x="270" y="1010" width="14" height="34" fill="#fff" stroke="#333"/>
+<text x="290" y="1030" font-size="9" fill="#333">Rbot1</text>
+<line x1="277" y1="999" x2="277" y2="1044" stroke="#333" stroke-width="1"/>
+<line x1="277" y1="1044" x2="277" y2="1080" stroke="#333" stroke-width="1"/>
+<line x1="277" y1="999" x2="360" y2="999" stroke="#333" stroke-width="1"/>
+<line x1="360" y1="999" x2="360" y2="556" stroke="#1e8449" stroke-width="1" stroke-dasharray="3,2"/>
+<line x1="360" y1="556" x2="440" y2="556" stroke="#1e8449" stroke-width="1" stroke-dasharray="3,2"/>
+<text x="300" y="960" font-size="9" fill="#1e8449">tap → A0</text>
+
+<!-- Divider resistors N2 -> A1 -->
+<rect x="330" y="875" width="14" height="34" fill="#fff" stroke="#333"/>
+<line x1="180" y1="900" x2="337" y2="900" stroke="#333" stroke-width="1"/>
+<line x1="337" y1="875" x2="337" y2="900" stroke="#333" stroke-width="1"/>
+<rect x="330" y="920" width="14" height="34" fill="#fff" stroke="#333"/>
+<line x1="337" y1="909" x2="337" y2="1080" stroke="#333" stroke-width="1"/>
+<line x1="337" y1="909" x2="400" y2="909" stroke="#333" stroke-width="1"/>
+<line x1="400" y1="909" x2="400" y2="574" stroke="#1e8449" stroke-width="1" stroke-dasharray="3,2"/>
+<line x1="400" y1="574" x2="440" y2="574" stroke="#1e8449" stroke-width="1" stroke-dasharray="3,2"/>
+<text x="345" y="870" font-size="9" fill="#1e8449">tap → A1</text>
+
+<!-- Divider resistors N3 -> A2 -->
+<rect x="390" y="785" width="14" height="34" fill="#fff" stroke="#333"/>
+<line x1="180" y1="810" x2="397" y2="810" stroke="#333" stroke-width="1"/>
+<line x1="397" y1="785" x2="397" y2="810" stroke="#333" stroke-width="1"/>
+<rect x="390" y="830" width="14" height="34" fill="#fff" stroke="#333"/>
+<line x1="397" y1="819" x2="397" y2="1080" stroke="#333" stroke-width="1"/>
+<line x1="397" y1="819" x2="420" y2="819" stroke="#333" stroke-width="1"/>
+<line x1="420" y1="819" x2="420" y2="592" stroke="#1e8449" stroke-width="1" stroke-dasharray="3,2"/>
+<line x1="420" y1="592" x2="440" y2="592" stroke="#1e8449" stroke-width="1" stroke-dasharray="3,2"/>
+<text x="405" y="780" font-size="9" fill="#1e8449">tap → A2</text>
+
+<!-- Temp sensor divider to A3 -->
+<rect x="500" y="720" width="34" height="14" fill="#fff" stroke="#333"/>
+<text x="500" y="712" font-size="9" fill="#333">NTC/LM35 divider</text>
+<line x1="517" y1="734" x2="517" y2="675" stroke="#1e8449" stroke-width="1" stroke-dasharray="3,2"/>
+<line x1="517" y1="675" x2="517" y2="610" stroke="#1e8449" stroke-width="1" stroke-dasharray="3,2"/>
+<line x1="517" y1="610" x2="440" y2="610" stroke="#1e8449" stroke-width="1" stroke-dasharray="3,2"/>
+
+<!-- Balance MOSFETs across each cell -->
+<!-- Q1 across Cell1 -->
+<rect x="220" y="1015" width="26" height="18" fill="#fff" stroke="#a93226" stroke-width="1.3"/>
+<text x="233" y="1028" text-anchor="middle" font-size="8" fill="#a93226">Q1</text>
+<rect x="220" y="1040" width="26" height="14" fill="#fff" stroke="#333"/>
+<text x="233" y="1050" text-anchor="middle" font-size="7" fill="#333">Rbleed</text>
+<line x1="180" y1="990" x2="233" y2="990" stroke="#a93226" stroke-width="1"/>
+<line x1="233" y1="990" x2="233" y2="1015" stroke="#a93226" stroke-width="1"/>
+<line x1="233" y1="1054" x2="233" y2="1080" stroke="#a93226" stroke-width="1"/>
+<line x1="233" y1="1080" x2="180" y2="1080" stroke="#a93226" stroke-width="1"/>
+<line x1="246" y1="1024" x2="452" y2="1024" stroke="#a93226" stroke-width="1" stroke-dasharray="3,2"/>
+<line x1="452" y1="1024" x2="452" y2="632" stroke="#a93226" stroke-width="1" stroke-dasharray="3,2"/>
+<line x1="452" y1="632" x2="440" y2="632" stroke="#a93226" stroke-width="1" stroke-dasharray="3,2"/>
+<text x="250" y="1015" font-size="8" fill="#a93226">gate ← D5</text>
+
+<!-- Q2 across Cell2 -->
+<rect x="220" y="925" width="26" height="18" fill="#fff" stroke="#a93226" stroke-width="1.3"/>
+<text x="233" y="938" text-anchor="middle" font-size="8" fill="#a93226">Q2</text>
+<rect x="220" y="950" width="26" height="14" fill="#fff" stroke="#333"/>
+<text x="233" y="960" text-anchor="middle" font-size="7" fill="#333">Rbleed</text>
+<line x1="180" y1="900" x2="233" y2="900" stroke="#a93226" stroke-width="1"/>
+<line x1="233" y1="900" x2="233" y2="925" stroke="#a93226" stroke-width="1"/>
+<line x1="233" y1="964" x2="233" y2="990" stroke="#a93226" stroke-width="1"/>
+<line x1="233" y1="990" x2="180" y2="990" stroke="#a93226" stroke-width="1" opacity="0"/>
+<text x="250" y="925" font-size="8" fill="#a93226">gate ← D6</text>
+
+<!-- Q3 across Cell3 -->
+<rect x="220" y="835" width="26" height="18" fill="#fff" stroke="#a93226" stroke-width="1.3"/>
+<text x="233" y="848" text-anchor="middle" font-size="8" fill="#a93226">Q3</text>
+<rect x="220" y="860" width="26" height="14" fill="#fff" stroke="#333"/>
+<text x="233" y="870" text-anchor="middle" font-size="7" fill="#333">Rbleed</text>
+<line x1="180" y1="810" x2="233" y2="810" stroke="#a93226" stroke-width="1"/>
+<line x1="233" y1="810" x2="233" y2="835" stroke="#a93226" stroke-width="1"/>
+<line x1="233" y1="874" x2="233" y2="900" stroke="#a93226" stroke-width="1"/>
+<text x="250" y="835" font-size="8" fill="#a93226">gate ← D7</text>
+
+<text x="60" y="475" font-size="10" fill="#145a32">(Divider/bleed paths for Module 2, right, are identical — labels condensed there)</text>
+
+<!-- ============================================================ -->
+<!-- MODULE 2 -->
+<!-- ============================================================ -->
+<rect x="760" y="430" width="700" height="690" rx="8" fill="#fdf2f2" stroke="#a93226" stroke-width="2"/>
+<text x="1110" y="455" text-anchor="middle" font-size="15" font-weight="bold" fill="#78281f">Module 2 — ATtiny, I2C addr 0x11, module_id 2 (Cells 4-6, pack top)</text>
+
+<rect x="1160" y="475" width="260" height="200" rx="6" fill="#ffffff" stroke="#a93226" stroke-width="1.5"/>
+<text x="1290" y="495" text-anchor="middle" font-size="12" font-weight="bold" fill="#78281f">ATtiny (Module 2)</text>
+<text x="1172" y="516" font-size="11" fill="#78281f">A4 (SDA) → bus</text>
+<text x="1172" y="534" font-size="11" fill="#78281f">A5 (SCL) → bus</text>
+<text x="1172" y="556" font-size="11" fill="#78281f">A0 ← N4 divider tap</text>
+<text x="1172" y="574" font-size="11" fill="#78281f">A1 ← N5 divider tap</text>
+<text x="1172" y="592" font-size="11" fill="#78281f">A2 ← N6 divider tap (pack top)</text>
+<text x="1172" y="610" font-size="11" fill="#78281f">A3 ← Temp divider tap</text>
+<text x="1172" y="632" font-size="11" fill="#78281f">D5/D6/D7 → gate resistors → Q4/Q5/Q6</text>
+<text x="1172" y="654" font-size="11" fill="#78281f">GND (=N3) / VCC (local LDO, isolated)</text>
+
+<line x1="1190" y1="475" x2="1190" y2="330" stroke="#c0392b" stroke-width="1.5"/>
+<line x1="1210" y1="475" x2="1210" y2="360" stroke="#2471a3" stroke-width="1.5"/>
+<line x1="1230" y1="475" x2="1230" y2="390" stroke="#555" stroke-width="1.2"/>
+
+<!-- Cell stack module 2: bottom = N3 (from module 1 top) to top N6 -->
+<line x1="860" y1="1080" x2="940" y2="1080" stroke="#333" stroke-width="1.5"/>
+<text x="945" y="1084" font-size="10" fill="#333">= N3 (Module 1 top / this module's local GND)</text>
+
+<rect x="870" y="1000" width="60" height="70" fill="#fdedec" stroke="#78281f" stroke-width="1.5"/>
+<text x="900" y="1040" text-anchor="middle" font-size="11" font-weight="bold" fill="#78281f">Cell 4</text>
+<line x1="900" y1="1080" x2="900" y2="1070" stroke="#333" stroke-width="1.5"/>
+<line x1="900" y1="1000" x2="900" y2="990" stroke="#333" stroke-width="1.5"/>
+<circle cx="900" cy="990" r="3" fill="#333"/>
+<text x="908" y="985" font-size="10" fill="#333">N4</text>
+
+<rect x="870" y="910" width="60" height="70" fill="#fdedec" stroke="#78281f" stroke-width="1.5"/>
+<text x="900" y="950" text-anchor="middle" font-size="11" font-weight="bold" fill="#78281f">Cell 5</text>
+<line x1="900" y1="990" x2="900" y2="980" stroke="#333" stroke-width="1.5"/>
+<line x1="900" y1="910" x2="900" y2="900" stroke="#333" stroke-width="1.5"/>
+<circle cx="900" cy="900" r="3" fill="#333"/>
+<text x="908" y="895" font-size="10" fill="#333">N5</text>
+
+<rect x="870" y="820" width="60" height="70" fill="#fdedec" stroke="#78281f" stroke-width="1.5"/>
+<text x="900" y="860" text-anchor="middle" font-size="11" font-weight="bold" fill="#78281f">Cell 6</text>
+<line x1="900" y1="900" x2="900" y2="890" stroke="#333" stroke-width="1.5"/>
+<line x1="900" y1="820" x2="900" y2="810" stroke="#333" stroke-width="1.5"/>
+<circle cx="900" cy="810" r="3" fill="#333"/>
+<text x="908" y="805" font-size="10" fill="#333">N6 (pack top, overall)</text>
+
+<!-- Divider N4 -> A0 -->
+<rect x="990" y="965" width="14" height="34" fill="#fff" stroke="#333"/>
+<line x1="900" y1="990" x2="997" y2="990" stroke="#333" stroke-width="1"/>
+<line x1="997" y1="965" x2="997" y2="990" stroke="#333" stroke-width="1"/>
+<rect x="990" y="1010" width="14" height="34" fill="#fff" stroke="#333"/>
+<line x1="997" y1="999" x2="997" y2="1080" stroke="#333" stroke-width="1"/>
+<line x1="997" y1="999" x2="1080" y2="999" stroke="#333" stroke-width="1"/>
+<line x1="1080" y1="999" x2="1080" y2="556" stroke="#a93226" stroke-width="1" stroke-dasharray="3,2"/>
+<line x1="1080" y1="556" x2="1160" y2="556" stroke="#a93226" stroke-width="1" stroke-dasharray="3,2"/>
+<text x="1020" y="960" font-size="9" fill="#a93226">tap → A0</text>
+
+<!-- Divider N5 -> A1 -->
+<rect x="1050" y="875" width="14" height="34" fill="#fff" stroke="#333"/>
+<line x1="900" y1="900" x2="1057" y2="900" stroke="#333" stroke-width="1"/>
+<line x1="1057" y1="875" x2="1057" y2="900" stroke="#333" stroke-width="1"/>
+<rect x="1050" y="920" width="14" height="34" fill="#fff" stroke="#333"/>
+<line x1="1057" y1="909" x2="1057" y2="1080" stroke="#333" stroke-width="1"/>
+<line x1="1057" y1="909" x2="1120" y2="909" stroke="#333" stroke-width="1"/>
+<line x1="1120" y1="909" x2="1120" y2="574" stroke="#a93226" stroke-width="1" stroke-dasharray="3,2"/>
+<line x1="1120" y1="574" x2="1160" y2="574" stroke="#a93226" stroke-width="1" stroke-dasharray="3,2"/>
+<text x="1065" y="870" font-size="9" fill="#a93226">tap → A1</text>
+
+<!-- Divider N6 -> A2 -->
+<rect x="1110" y="785" width="14" height="34" fill="#fff" stroke="#333"/>
+<line x1="900" y1="810" x2="1117" y2="810" stroke="#333" stroke-width="1"/>
+<line x1="1117" y1="785" x2="1117" y2="810" stroke="#333" stroke-width="1"/>
+<rect x="1110" y="830" width="14" height="34" fill="#fff" stroke="#333"/>
+<line x1="1117" y1="819" x2="1117" y2="1080" stroke="#333" stroke-width="1"/>
+<line x1="1117" y1="819" x2="1140" y2="819" stroke="#333" stroke-width="1"/>
+<line x1="1140" y1="819" x2="1140" y2="592" stroke="#a93226" stroke-width="1" stroke-dasharray="3,2"/>
+<line x1="1140" y1="592" x2="1160" y2="592" stroke="#a93226" stroke-width="1" stroke-dasharray="3,2"/>
+<text x="1125" y="780" font-size="9" fill="#a93226">tap → A2</text>
+
+<!-- Temp divider module 2 -->
+<rect x="1220" y="720" width="34" height="14" fill="#fff" stroke="#333"/>
+<text x="1220" y="712" font-size="9" fill="#333">NTC/LM35 divider</text>
+<line x1="1237" y1="734" x2="1237" y2="610" stroke="#a93226" stroke-width="1" stroke-dasharray="3,2"/>
+<line x1="1237" y1="610" x2="1160" y2="610" stroke="#a93226" stroke-width="1" stroke-dasharray="3,2"/>
+
+<!-- Balance MOSFETs module 2 -->
+<rect x="940" y="1015" width="26" height="18" fill="#fff" stroke="#78281f" stroke-width="1.3"/>
+<text x="953" y="1028" text-anchor="middle" font-size="8" fill="#78281f">Q4</text>
+<rect x="940" y="1040" width="26" height="14" fill="#fff" stroke="#333"/>
+<text x="953" y="1050" text-anchor="middle" font-size="7" fill="#333">Rbleed</text>
+<line x1="900" y1="990" x2="953" y2="990" stroke="#78281f" stroke-width="1"/>
+<line x1="953" y1="990" x2="953" y2="1015" stroke="#78281f" stroke-width="1"/>
+<line x1="953" y1="1054" x2="953" y2="1080" stroke="#78281f" stroke-width="1"/>
+<line x1="953" y1="1080" x2="900" y2="1080" stroke="#78281f" stroke-width="1"/>
+<text x="970" y="1015" font-size="8" fill="#78281f">gate ← D5</text>
+
+<rect x="940" y="925" width="26" height="18" fill="#fff" stroke="#78281f" stroke-width="1.3"/>
+<text x="953" y="938" text-anchor="middle" font-size="8" fill="#78281f">Q5</text>
+<rect x="940" y="950" width="26" height="14" fill="#fff" stroke="#333"/>
+<text x="953" y="960" text-anchor="middle" font-size="7" fill="#333">Rbleed</text>
+<line x1="900" y1="900" x2="953" y2="900" stroke="#78281f" stroke-width="1"/>
+<line x1="953" y1="900" x2="953" y2="925" stroke="#78281f" stroke-width="1"/>
+<line x1="953" y1="964" x2="953" y2="990" stroke="#78281f" stroke-width="1"/>
+<text x="970" y="925" font-size="8" fill="#78281f">gate ← D6</text>
+
+<rect x="940" y="835" width="26" height="18" fill="#fff" stroke="#78281f" stroke-width="1.3"/>
+<text x="953" y="848" text-anchor="middle" font-size="8" fill="#78281f">Q6</text>
+<rect x="940" y="860" width="26" height="14" fill="#fff" stroke="#333"/>
+<text x="953" y="870" text-anchor="middle" font-size="7" fill="#333">Rbleed</text>
+<line x1="900" y1="810" x2="953" y2="810" stroke="#78281f" stroke-width="1"/>
+<line x1="953" y1="810" x2="953" y2="835" stroke="#78281f" stroke-width="1"/>
+<line x1="953" y1="874" x2="953" y2="900" stroke="#78281f" stroke-width="1"/>
+<text x="970" y="835" font-size="8" fill="#78281f">gate ← D7</text>
+
+<!-- ============ LEGEND ============ -->
+<rect x="60" y="1090" width="1380" height="50" fill="#f8f9f9" stroke="#ccc"/>
+<line x1="75" y1="1105" x2="105" y2="1105" stroke="#333" stroke-width="1"/><text x="110" y="1109" font-size="10" fill="#333">Wire</text>
+<line x1="170" y1="1105" x2="200" y2="1105" stroke="#1e8449" stroke-width="1" stroke-dasharray="3,2"/><text x="205" y="1109" font-size="10" fill="#333">ADC tap wire</text>
+<line x1="320" y1="1105" x2="350" y2="1105" stroke="#a93226" stroke-width="1"/><text x="355" y="1109" font-size="10" fill="#333">Balance path (through Qn + Rbleed)</text>
+<rect x="560" y="1098" width="14" height="14" fill="#fff" stroke="#333"/><text x="580" y="1109" font-size="10" fill="#333">Resistor</text>
+<rect x="660" y="1098" width="26" height="14" fill="#fff" stroke="#a93226" stroke-width="1.3"/><text x="695" y="1109" font-size="10" fill="#333">Logic-level N-MOSFET (e.g. AO3400)</text>
+<rect x="920" y="1090" width="60" height="30" fill="#fef9e7" stroke="#7d6608"/><text x="990" y="1109" font-size="10" fill="#333">Li-ion cell</text>
+<text x="1080" y="1105" font-size="10" fill="#333">N1..N6 = stack nodes, top of each cell</text>
+</svg>
